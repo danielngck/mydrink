@@ -1,0 +1,199 @@
+<%- include('head.ejs') %>
+<title><%= title %></title>
+<style>
+  .modal-body {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align form groups */
+  }
+  .modal-dialog {
+    max-width: 800px; /* Set maximum width */
+    width: 100%; /* Set width to 90% of the viewport */
+  }
+  
+  .form-group {
+    width: 100%; /* Set consistent width */
+    margin-bottom: 15px; /* Space between form groups */
+  }
+  
+  label {
+    margin-bottom: 5px; /* Space between label and input */
+    font-weight: bold; /* Make labels stand out */
+  }
+  /* Responsive Mobile View Adjustments */
+@media (max-width: 576px) {
+  .modal-dialog {
+    max-width: 95%; /* Increase width for better readability on mobile */
+    margin: auto; /* Adjust margins for smaller screens */
+  }
+  .modal {
+    display: none; /* Hidden by default */
+    position: absolute; /* Stay in place */
+    z-index: 1050; /* Sit on top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Centering adjustment */
+    width: 100%; /* Full width */
+    height: auto; /* Full height */
+    overflow: hidden; /* Prevent overflow of the modal itself */
+  }
+  .modal-content {
+    max-height: 85vh; /* Limit height to prevent excessive scrolling */
+    overflow-y: auto; /* Enable scrolling for long content */
+    padding: 2px; /* Add padding for better mobile layout */
+  }
+
+  .modal-body {
+    align-items:stretch; /* Stretch items to use full width */
+    padding: 2px; /* Adjust padding for spacing */
+  }
+
+  .form-group {
+    margin-bottom: 2px; /* Slightly reduce spacing */
+  }
+}
+</style>
+  <body>
+    <header><%- include('header.ejs') %></header>
+    <div class="container nav-padding">
+      <div class="d-flex justify-content-between align-items-center bg-light p-2">
+        <h3>Member details: [<span style="color:blue"> <%= user.name %></span> ]
+        <span class="fa fa-user ms-auto" style="color: green; font-size: 25px;">
+        </span></h3>
+      </div>
+      <table class="table table-bordered">
+        <thead class="table-light" style="font-size: 15px">
+          <tr>
+            <!-- <th>ID</th> -->
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody id="userTable">
+          <% if (users) { %>
+          <tr>
+            <td><%= users.urName %></td>
+            <!-- Access user.urName -->
+            <td><%= users.urEmail %></td>
+            <!-- Access user.urEmail -->
+            <td>
+              <button
+                class="btn btn-primary"
+                onclick="showUpdateModal('<%= users._id %>', '<%= users.urName %>', '<%= users.urEmail %>')">Update
+              </button>
+            </td>
+          </tr>
+          <% } else { %>
+          <tr>
+            <td colspan="4" class="text-center">No user found.</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal" id="updateModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Member update</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="updateUserId" />
+            <div class="form-group row">
+              <label for="updateUsername" class="col-sm-4 col-form-label">Username</label>
+              <div class="col-sm-8">
+                <input type="text" id="updateUsername" class="form-control" readonly />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="updateEmail" class="col-sm-4 col-form-label">Email</label>
+              <div class="col-sm-8">
+                <input type="text" id="updateEmail" class="form-control" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="updatePassword" class="col-sm-4 col-form-label">New Password</label>
+              <div class="col-sm-8">
+                <input type="password" id="updatePassword" class="form-control" placeholder="Leave blank to keep current password" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="confirmPassword" class="col-sm-4 col-form-label">Confirm Password</label>
+              <div class="col-sm-8">
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="submitUpdate()">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+<div id="alert-message" style="display: none"></div>
+
+
+    <!-- Confirmation Dialog -->
+    <script>
+          function showUpdateModal(userId, username, email) {
+            // console.log("Opening modal for user:", userId, username, email, password); // Debug log
+            $('#updateUserId').val(userId);
+            $('#updateUsername').val(username);
+            $('#updateEmail').val(email);
+            $('#updatePassword').val('');  // Clear the password field
+            $('#confirmPassword').val(''); // Clear the confirm password field
+            $('#updateModal').modal('show');
+          }
+
+          function submitUpdate() {
+            const userId = $('#updateUserId').val();
+            const updatedData = {
+              urName: $('#updateUsername').val(),
+              urEmail: $('#updateEmail').val(),
+              urPwd: $('#updatePassword').val()
+            };
+
+            const confirmPassword = $('#confirmPassword').val();
+
+            // Check if new password and confirm password match
+            if (updatedData.urPwd && updatedData.urPwd !== confirmPassword) {
+                alert('Passwords do not match. Please try again.');
+                return; // Stop the update if passwords don't match
+            }
+
+             // Remove urPwd if it's empty
+             if (!updatedData.urPwd) {
+              delete updatedData.urPwd;
+          }
+
+ $.ajax({
+    url: `/member/singleList/${userId}`,
+    type: 'PUT',
+    contentType: 'application/json',
+    data: JSON.stringify(updatedData),
+    success: function (response) {
+                alert(response.message);
+                location.reload(); // Reload the page to reflect changes
+              },
+              error: function (err) {
+                alert(err.responseJSON.error);
+              }
+    })
+};
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  </body>
+</html>
+

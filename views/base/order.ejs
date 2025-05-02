@@ -1,0 +1,133 @@
+<%- include('../base/head.ejs') %>
+  <title>Order Form</title>
+
+  <style>
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th:nth-child(1), td:nth-child(1) { width: 20%; }
+    th:nth-child(2), td:nth-child(2) { width: 40%; }
+    th:nth-child(3), td:nth-child(3) { width: 10%; }
+    th:nth-child(4), td:nth-child(4) { width: 10%; }
+
+    .order-details {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+
+    .order-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px; /* Rounded corners */
+    }
+
+    /* Hide the spinner controls */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    };
+
+    .quantity-field {
+      width: 60px; /* Set a fixed width:60 for better alignment */
+      padding: 5px; /* Padding for usability */
+      font-size: 1.2rem; /* Adjust font size */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        th:nth-child(4), td:nth-child(4) { width: 50%; } /* Adjust on mobile if needed 50*/
+    }
+  </style>
+
+<body>
+  <header><%- include('../base/header.ejs') %></header>
+  <div class="container nav-padding">
+    <div class="d-flex justify-content-between align-items-center bg-light">
+      <h2>Order Form</h2>
+      <h5 class="position-relative">
+        <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger custom-circle" 
+        id="cartCount">0</span>
+        <span class="fa fa-2x fa-shopping-cart me-5" style="color: green;" onclick="displayCartDetails()"></span>
+      </h5>
+    </div> 
+  <hr>
+    <form id="orderForm">
+      <h4>Coffee Selection</h4>
+      <table class="table table-bordered table-striped mt-0 mb-3">
+        <thead style=background-color:antiquewhite;>
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="coffeeSelection"></tbody>
+      </table>
+
+      <h4 class="mt-1">Snack Selection</h4>
+      <table class="table table-bordered table-striped mt-1">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody id="snackSelection"></tbody>
+      </table>
+      <div class="row g-1 mb-2">
+        <div class="col-md-6">
+          <label for="customerName" class="form-label"><strong>User Name:</strong></label>
+                <input type="text" class="form-control" id="customerName" required>
+                <div id="nameWarning" class="text-danger" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="row g-1 mb-2">
+        <div class="col-md-6">
+          <label for="customerEmail" class="form-label"><strong>User Email:</strong></label>
+          <input type="email" class="form-control" id="customerEmail" value="<%= user.email %>" 
+          required readonly/> 
+        </div>
+      </div>
+      <div class="row g-1 mb-2">
+        <div class="col-md-6">
+        <h4>Total Amount: <span id="totalAmount">$0.00</span></h4>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">Checkout</button>
+    </form>
+</div>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="orderModalLabel">Your Current Cart</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div id="orderDetails"></div> <!-- Order details will be displayed here -->
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-danger" id="clearCartButton">Clear Cart</button> <!-- Clear Cart Button -->
+          </div>
+      </div>
+  </div>
+</div>
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/script.js"></script>
+</body>
+</html>

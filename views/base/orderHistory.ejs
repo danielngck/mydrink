@@ -1,0 +1,206 @@
+<%- include('../base/head.ejs') %>
+  <title>Order History</title>
+
+    <style>
+        .home-button {
+            margin-left: auto; /* Align home button to the right */
+        }
+
+        .item-list {
+            padding-left: 30px; /* Increased space for bullet points 30*/
+            margin: 0; /* Remove margin */
+            list-style-type: square; /* Bullet points */
+        }
+
+        .action-buttons {
+            display: flex; /* Use flexbox for alignment */
+            flex-direction: column;
+            gap: 5px; /* Space between buttons */
+        }
+
+        .action-column {
+            width: 120px; /* Set fixed width for Actions column */
+        }
+
+        .action-button {
+            width: 70px; /* Set width for action buttons */
+            padding: 5px; /* Smaller padding */
+            font-size: 14px; /* Smaller font size */
+        }
+        .datetime-col {
+            white-space: nowrap; /* Prevent line breaks */
+            overflow:hidden; /* Hide overflow */
+            text-overflow:ellipsis; /* Show ellipsis */
+            text-align: left; /* Align text to the left */
+            width:120px;
+        }
+        .item-col {
+            width:400px;
+        }
+        table {
+            table-layout: auto; /* Allow columns to adjust based on content */
+            width: 100%; /* Full width for the table */
+        }
+
+        @media (max-width: 576px) {
+            .action-column {
+                width: auto; /* Allow action column to take available space on small screens */
+            }
+            .item-list {
+                padding-left: 15px; /* Adjust bullet point padding for smaller screens */
+                width:350px;
+            }
+
+            .action-buttons {
+                width: auto; /* Allow buttons to adapt to content */
+                font-size: 12px; /* Smaller font size on mobile */
+            }
+        }
+    </style>
+
+<body>
+    <header><%- include('../base/header.ejs') %></header>
+    <div class="container nav-padding">
+        <div class="d-flex justify-content-between align-items-center bg-light">
+            <h2>User Order History</h2>
+        </div>
+        <table class="table table-bordered table-striped mt-0">
+            <thead style=background-color:antiquewhite;>
+                <tr>
+                    <th>Reference Number</th>
+                    <th class="datetime-col">DateTime</th>
+                    <th>Total Amount</th>
+                    <th class="item-col">Items</th>
+                    <th class="status-col">Status</th>
+                    <th class="action-column">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (orders && orders.length > 0) { %>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order.referenceNumber.toString().padStart(4, '0') %></td>
+                            <td class="datetime-col">
+                                <span class="date"><%= new Date(order.orderDate).toLocaleDateString('en-HK', { timeZone: 'Asia/Hong_Kong' }) %></span>
+                                <br>
+                                <span class="time"><%= new Date(order.orderDate).toLocaleTimeString('en-HK', { timeZone: 'Asia/Hong_Kong' }) %></span>
+                              </td>
+                              
+                            <td>$<%= order.totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></td>
+                            <td>
+                                <ul class="item-list">
+                                    <% order.items.forEach(item => { %>
+                                        <li><%= item.productName %> - Qty: <%= item.quantity.toLocaleString() %> - Price: $<%= item.price.toFixed(2) %></li>
+                                    <% }); %>
+                                </ul>
+                            </td>
+                            <td style="color: darkgreen;"><%= order.status %></td>
+                            <td class="action-column">
+                                <div class="action-buttons">
+                                    <button onclick="openStatusModal('<%= order._id %>', '<%= order.status %>')" class="btn btn-warning action-button">Update</button>
+                                    <button onclick="deleteOrder('<%= order._id %>')" class="btn btn-danger action-button">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="6" class="text-center">No orders found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for updating order status -->
+    <div class="modal fade" id="statusModal" tabindex="-1" aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="statusModalLabel">Update Order Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="statusForm">
+                        <div class="mb-3">
+                            <label for="orderStatus" class="form-label"></label>
+                            <select class="form-select" id="orderStatus" required>
+                                <option value="" disabled selected>Select a status</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Cancelled">Cancelled</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <input type="hidden" id="orderId">
+                        <input type="hidden" id="currentStatus"> <!-- Hidden field for current status -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitStatus">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openStatusModal(orderId, currentStatus) {
+            document.getElementById('orderId').value = orderId;
+            document.getElementById('currentStatus').value = currentStatus; // Store the current status
+            document.getElementById('orderStatus').value = ""; // Reset the selection
+            const modal = new bootstrap.Modal(document.getElementById('statusModal'));
+            modal.show();
+        }
+
+        document.getElementById('submitStatus').addEventListener('click', async () => {
+            const orderId = document.getElementById('orderId').value;
+            const newStatus = document.getElementById('orderStatus').value;
+            const currentStatus = document.getElementById('currentStatus').value;
+
+            // If no new status is selected, use the current status
+            const statusToUpdate = newStatus !== "" ? newStatus : currentStatus;
+
+            try {
+                const response = await fetch(`/orders/update-status/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ status: statusToUpdate }),
+                    credentials: 'include' // Important for session cookies
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update status');
+                }
+
+                alert('Order status updated successfully');
+                location.reload(); // Reload to see updated status
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+
+        function deleteOrder(orderId) {
+            if (confirm("Are you sure you want to delete this order?")) {
+                fetch(`/orders/delete/${orderId}`, {
+                    method: 'DELETE',
+                    credentials: 'include' // Important for session cookies
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete order');
+                    }
+                    alert('Order deleted successfully');
+                    location.reload(); // Reload to see updated orders
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

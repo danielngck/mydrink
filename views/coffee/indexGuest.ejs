@@ -1,0 +1,76 @@
+<%- include('../base/head.ejs') %>
+<title>All Coffee list</title>
+
+  <style>
+    th, td {
+        border: 1px solid #ddd; /* Adds borders for clarity */
+        padding: 8px; /* Adds padding */
+        text-align: left; /* Aligns text */
+    }
+    /* Set fixed widths for columns */
+    th:nth-child(1), td:nth-child(1) { width: 20%; } /* Name */
+    th:nth-child(2), td:nth-child(2) { width: 30%; } /* Description */
+    th:nth-child(3), td:nth-child(3) { width: 10%; } /* Price */
+    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Quantity */
+    th:nth-child(5), td:nth-child(5) { width: 10%; }  /* Image */
+  </style>
+
+<body>
+  <header><%- include('../base/header.ejs') %></header>
+  <div class="container nav-padding">
+    <div class="d-flex justify-content-between align-items-center bg-light">
+    <h2 class="mt-0 p-0" style=font-family:sans-serif>All Coffee Drinks</h2>
+  </div>
+  
+  <table class="table mt-0 table-striped" border="1" cellpadding="1">
+    <thead style=background-color:antiquewhite;>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+       
+        <th>Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- sort by name in ascending order -->
+      <% coffee.sort((a, b) => a.name.localeCompare(b.name)); %> 
+
+      <% if (coffee && coffee.length> 0) { %>
+        <% coffee.forEach(coffee=> { %>
+          <tr>
+            <td>
+              <%= coffee.name %>
+            </td>
+            <td>
+              <%= coffee.description %>
+            </td>
+            <td>$<%= coffee.price.toFixed(2) %>
+            </td>
+
+            <td>
+              <% if (coffee.image) { %>
+                <img src= "<%= coffee.image %>" alt="<%= coffee.name %>" style="width: 120px; height: auto;">
+              <% } else { %>
+                <span>No Image Available</span>
+              <% } %>
+            </td>
+  
+          </tr>
+          <% }); %>
+            <% } else { %>
+              <tr>
+                <td colspan="5">No coffee products found.</td>
+              </tr>
+              <% } %>
+    </tbody>
+  </table>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous">
+  </script>
+</body>
+</html>

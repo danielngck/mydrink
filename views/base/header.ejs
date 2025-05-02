@@ -1,0 +1,126 @@
+<nav class="header_bg navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid d-flex align-items-center h-90">
+    <a class="navbar-brand" href="/">
+      <img src="/images/zc-panda_logo.png" width="90px" height="auto" />
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#about1">About</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <% if (!user || user.name !=='admin' ) { %>
+            <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">Product
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+              style="margin-top: -10px;">
+              <li>
+                <a class="dropdown-item" href="/coffees/allCoffeeGuest">Coffee Drinks</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/snacks/allSnackGuest">Snacks</a>
+              </li>
+              <% if (user) { %>
+                <li>
+                  <a class="dropdown-item" href="/orders/orderIndex">Place Order</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="/orders/orderHistory">Order History</a>
+                </li>
+                <% } %>
+            </ul>
+            <% } %>
+        </li>
+
+        <% if (user && user.name==='admin' ) { %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin Menu
+            </a>
+            <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+              style="margin-top: -1.2rem;">
+              <li>
+                <a class="dropdown-item" href="/coffees/allCoffee">Coffee Drinks</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/snacks/allSnack">Snacks</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/orders/adminOrderHistory">Admin Order Management</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/page/comments">Comments</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/member/list">Members List</a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+            <% if (user) { %>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  Member
+                </a>
+                <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
+                  style="margin-top: -1.2rem;">
+                  <li>
+                    <a class="dropdown-item" href="/member/listOne">Member update: <span style="color:chocolate">
+                        <%= user.name %>
+                      </span></a>
+                  </li>
+                </ul>
+              </li>
+              <% } %>
+                
+                  <li class="nav-item">
+                    <a class="nav-link" href="/#getintouch1">Get in touch</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/#customer1">Customer Say</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/#shop1">Shop</a>
+                  </li>
+
+                    <% if (user) { %>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/member/logout" style="color: blue; margin-bottom: -15px;">
+                          <span class="fa fa-sign-out" style="color: green;"> <span style="color:blue;">Logout</span></span>
+                        </a>
+                        <span style="font-size: 18px;color:navy">&nbsp;&nbsp;Hi,<%= user.name %> !</span>
+                      </li>
+
+                      <% } else { %>
+                        <li class="nav-item">
+                          <a class="nav-link" href="/member/login" style="color: blue"><span class="fa fa-sign-in"
+                              style="color: green;"></span> Login</a>
+                        </li>
+                        <% } %>
+
+      </ul>
+
+      <form action="/search/productSearch" method="GET" class="d-grid d-flex justify-content-start">
+        <input class="form-control w-75 ms-auto" type="text" name="q" placeholder="Search Products..." required />
+        <span class="input-group-text border-0 bg-transparent" id="search-addon">
+          <button class="fa fa-search" type="submit"
+            style="color:darkolivegreen;font-size:20px;outline:none;background:none"></button></span>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+<script src="./js/script.js"></script>

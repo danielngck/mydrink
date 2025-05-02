@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Comments</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="/css/style.css" />
+    <!-- Add this to include Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      .edit-icon {
+        cursor: pointer;
+      }
+
+      .save-icon,
+      .cancel-icon {
+        cursor: pointer;
+        margin-left: 5px;
+      }
+    </style>
+  </head>
+ 
+  <body>
+    <div class="container mt-2">
+        <!-- <br/> -->      
+      <h2 class="d-inline">
+        <strong>Manage Customer Comments</strong></h2><span>   &nbsp;&nbsp; or go to
+        <a href="/"> <button type="submit" class="btn btn-success" style="font-size: 16px">Home</button></a></span>
+        
+      <!-- Table to display comments -->
+      <table id="commentsTable" class="comments-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th>Visibility</th>
+            <!-- New column -->
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+      <br />
+      <!-- Form to add a new comment -->
+<h2><strong>Add New Comment</strong></h2>
+<form id="addCommentForm" style="margin: 0; padding: 0">
+  <div class="mb-1">
+    <input
+      type="text"
+      class="form-label"
+      id="newCoName"
+      name="coName"
+      placeholder="Enter Name"
+      required
+      style="width: 20rem;"
+    />
+  </div>
+  <div class="mb-1">
+    <input
+      type="email"
+      class="form-label"
+      id="newCoEmail"
+      name="coEmail"
+      placeholder="Enter Email"
+      required
+      style="width: 20rem;"
+    />
+  </div>
+  <div class="mb-1">
+    <input
+      type="text"
+      class="form-label"
+      id="newCoPhone"
+      name="coPhone"
+      placeholder="Enter Phone"
+      required
+      style="width: 20rem;"
+    />
+  </div>
+  <div class="mb-1">
+    <textarea
+      id="newCoMessage"
+      class="form-label"
+      name="coMessage"
+      placeholder="Enter Comment"
+      required
+      style="width: 20rem;"
+    ></textarea>
+  </div>
+  <button type="submit" style="margin-top: 10px; font-size: 16px; background-color:blue; color:white">Add Comment</button>
+</form>
+</div>
+
+    <script src="/js/commentCrud.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+
+
+<!-- <h2><strong>Add New Comment</strong></h2>
+<form id="addCommentForm" style="margin: 0; padding: 0">
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-label"
+      id="newCoName"
+      name="coName"
+      placeholder="Enter Name"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <input
+      type="email"
+      class="form-label"
+      id="newCoEmail"
+      name="coEmail"
+      placeholder="Enter Email"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-label"
+      id="newCoPhone"
+      name="coPhone"
+      placeholder="Enter Phone"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <textarea
+      id="newCoMessage"
+      class="form-label"
+      name="coMessage"
+      placeholder="Enter Comment"
+      required
+    ></textarea>
+  </div>
+  <button type="submit" style="margin-top: 10px; font-size: 18px; background-color:blue; color:white">Add Comment</button>
+</form>
+</div> -->

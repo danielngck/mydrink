@@ -1,0 +1,101 @@
+<!-- views/page/contact.ejs -->
+<!-- contact section start -->
+<div class="container-fluid no-gutters">
+  <div id="getintouch1" class="contact_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1 class="contact_taital">Get In Touch</h1>
+          <div class="bulit_icon"><img src="images/bulit-icon.png" /></div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="contact_section_2">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mail_section_1">
+              <form
+                id="contactForm"
+                action="/customer/addComment"
+                method="POST"
+              >
+                <!-- Form element -->
+                <input
+                  type="text"
+                  class="mail_text"
+                  placeholder="Your Name"
+                  name="coName"
+                  required
+                />
+                <input
+                  type="email"
+                  class="mail_text"
+                  placeholder="Your Email"
+                  name="coEmail"
+                  required
+                />
+                <input
+                  type="text"
+                  class="mail_text"
+                  placeholder="Your Phone"
+                  name="coPhone"
+                  required
+                />
+                <textarea
+                  class="message-bt"
+                  placeholder="Message"
+                  rows="5"
+                  id="comment"
+                  name="coMessage"
+                  required
+                ></textarea>
+                <div class="send_bt">
+                  <button type="submit" id="sendMessageButton">SEND</button>
+                </div>
+                <!-- Submit button -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- contact section end -->
+
+<script src="js/script.js"></script>
+
+<!-- 
+<script>
+document
+  .getElementById('contactForm')
+  .addEventListener('submit', async function (event) {
+    event.preventDefault() // Prevent the default form submission
+
+    // Collect form data
+    const formData = new FormData(this)
+    const formObject = Object.fromEntries(formData.entries())
+
+    try {
+      // Send the form data to the backend
+      const response = await fetch('/customer/addComment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formObject)
+      })
+
+      const result = await response.json()
+
+      // Handle server response
+      if (response.ok) {
+        alert(result.message) // Display success message
+      } else {
+        alert(result.message) // Display error message from server
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('An unexpected error occurred. Please try again.') // Fallback error message
+    }
+  })
+</script> -->

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Modal</title>
+    <style>
+        /* Basic styles for the modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Form</h1>
+    <form id="orderForm">
+        <input type="text" id="customerName" placeholder="Your Name" required>
+        <input type="email" id="customerEmail" placeholder="Your Email" required>
+        <div id="itemsContainer">
+            <div class="item">
+                <input type="text" class="productName" placeholder="Product Name" required>
+                <input type="number" class="quantity" placeholder="Quantity" required>
+                <input type="number" class="price" placeholder="Price" required>
+            </div>
+        </div>
+        <button type="button" id="addItem">Add Another Item</button>
+        <button type="button" id="checkoutButton">Checkout</button>
+    </form>
+
+    <!-- The Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Order Checkout Summary</h2>
+            <div id="orderSummary"></div>
+            <button id="confirmOrder">Confirm Order</button>
+        </div>
+    </div>
+
+    <h2>Your Orders</h2>
+    <div id="ordersList"></div>
+
+    <script>
+        const modal = document.getElementById("checkoutModal");
+        const btn = document.getElementById("checkoutButton");
+        const span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            const items = Array.from(document.querySelectorAll('.item')).map(item => ({
+                productName: item.querySelector('.productName').value,
+                quantity: parseInt(item.querySelector('.quantity').value),
+                price: parseFloat(item.querySelector('.price').value),
+            }));
+
+            const customerName = document.getElementById('customerName').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+            const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Display order summary in the modal
+            const summaryHtml = `
+                <p><strong>Name:</strong> ${customerName}</p>
+                <p><strong>Email:</strong> ${customerEmail}</p>
+                <h3>Items:</h3>
+                <ul>
+                    ${items.map(item => `<li>${item.productName} - Qty: ${item.quantity}, Price: $${item.price.toFixed(2)}</li>`).join('')}
+                </ul>
+                <p><strong>Total Amount:</strong> $${totalAmount.toFixed(2)}</p>
+            `;
+            document.getElementById('orderSummary').innerHTML = summaryHtml;
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.getElementById('confirmOrder').addEventListener('click', async () => {
+            const items = Array.from(document.querySelectorAll('.item')).map(item => ({
+                productName: item.querySelector('.productName').value,
+                quantity: parseInt(item.querySelector('.quantity').value),
+                price: parseFloat(item.querySelector('.price').value),
+            }));
+
+            const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const customerName = document.getElementById('customerName').value;
+            const customerEmail = document.getElementById('customerEmail').value;
+
+            const response = await fetch('/createOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items, totalAmount, customerName, customerEmail })
+            });
+
+            if (response.ok) {
+                alert("Order created successfully!");
+                modal.style.display = "none"; // Close the modal
+                fetchOrders(); // Fetch and display the order list
+            } else {
+                alert("Error creating order: " + await response.text());
+            }
+        });
+
+        async function fetchOrders() {
+            const response = await fetch('/orders');
+            const orders = await response.json();
+            const ordersList = document.getElementById('ordersList');
+            ordersList.innerHTML = '';
+            orders.forEach(order => {
+                const orderDiv = document.createElement('div');
+                orderDiv.innerText = `Order: ${order.referenceNumber}, Total: $${order.totalAmount}`;
+                ordersList.appendChild(orderDiv);
+            });
+        }
+
+        document.getElementById('addItem').addEventListener('click', () => {
+            const newItemDiv = document.createElement('div');
+            newItemDiv.classList.add('item');
+            newItemDiv.innerHTML = `
+                <input type="text" class="productName" placeholder="Product Name" required>
+                <input type="number" class="quantity" placeholder="Quantity" required>
+                <input type="number" class="price" placeholder="Price" required>
+            `;
+            document.getElementById('itemsContainer').appendChild(newItemDiv);
+        });
+    </script>
+</body>
+</html>
