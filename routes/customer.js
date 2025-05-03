@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
-//const { MongoClient } = require('mongodb');
 const { MongoClient, ObjectId } = require('mongodb');
+require('dotenv').config(); // Load environment variables from .env
 
+const mongoUser = process.env.MONGOOSE_USER;
+const mongoPass = process.env.MONGOOSE_PASS;
 
-const client = new MongoClient("mongodb+srv://danielng223:erb123@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
+const client = new MongoClient(`mongodb+srv://${mongoUser}:${mongoPass}@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
 
 
 router.put('/toggleVisibility/:id', async (req, res) => {

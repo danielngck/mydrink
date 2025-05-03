@@ -2,12 +2,17 @@ require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
+require('dotenv').config(); // Load environment variables from .env
+
+const mongoUser = process.env.MONGOOSE_USER;
+const mongoPass = process.env.MONGOOSE_PASS;
 
 //create Mongodb db entity
 var { MongoClient } = require('mongodb');
-// var { ObjectId } = require('mongodb');
-const cnn = new MongoClient("mongodb+srv://danielng223:erb123@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0");
 const ObjectId = require('mongodb').ObjectId;
+
+const cnn = new MongoClient(`mongodb+srv://${mongoUser}:${mongoPass}@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+
 
 const nodemailer = require('nodemailer');
 // Create a transporter

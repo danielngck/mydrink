@@ -1,5 +1,9 @@
 var express = require('express');
 var router = express.Router();
+require('dotenv').config(); // Load environment variables from .env
+
+const mongoUser = process.env.MONGOOSE_USER;
+const mongoPass = process.env.MONGOOSE_PASS;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,11 +13,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Panda Cafe Shop', successMessage });
 });
 
-
 const { MongoClient } = require('mongodb')
-const client = new MongoClient(
-  'mongodb+srv://danielng223:erb123@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0'
-)
+const client = new MongoClient(`mongodb+srv://${mongoUser}:${mongoPass}@cluster0.peze6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`);
+
 
 // Route to render customer.ejs with comments
 router.get('/customers', async (req, res) => {
