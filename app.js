@@ -8,17 +8,7 @@ const methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const nodemailer = require('nodemailer');
-
-// Create a transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // Use your email service
-  auth: {
-        user: process.env.EMAIL_USER, // Your email
-        pass: process.env.EMAIL_PASS, // Your app password
-  },
-});
-// user: 'pandacafeerb@gmail.com', // Your email
-// pass: 'kgnk fvqq ihwk sfor', // Your email password or app password
+require('dotenv').config(); // Load environment variables from .env
 
 var session = require('express-session');
 
@@ -33,18 +23,18 @@ var commentRouter = require('./routes/customer');
 var searchRouter = require('./routes/search');
 var orderRouter = require('./routes/orders');
 
-
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env
 // mongoose.connect('mongodb://localhost:27017/mydrink',{
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true
 // }).then(() => console.log('Connected to MongoDB'))
 //   .catch(err => console.error('Error connecting to MongoDB:', err));
-mongoose.connect('mongodb+srv://danielng223:erb123@cluster0.peze6.mongodb.net/drink?retryWrites=true&w=majority&appName=Cluster0')
+
+const mongoUser = process.env.MONGOOSE_USER;
+const mongoPass = process.env.MONGOOSE_PASS;
+mongoose.connect(`mongodb+srv://${mongoUser}:${mongoPass}@cluster0.peze6.mongodb.net/drink?retryWrites=true&w=majority&appName=Cluster0`)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
-
 
 var app = express();
 
