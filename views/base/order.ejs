@@ -2,29 +2,17 @@
   <title>Order Form</title>
 
   <style>
-    th, td {
+    .table th, .table td {
         border: 1px solid #ddd;
         padding: 8px;
         text-align: left;
+        font-size: 14px;
     }
-    th:nth-child(1), td:nth-child(1) { width: 20%; }
-    th:nth-child(2), td:nth-child(2) { width: 40%; }
-    th:nth-child(3), td:nth-child(3) { width: 10%; }
-    th:nth-child(4), td:nth-child(4) { width: 10%; }
+   .table th:nth-child(1), td:nth-child(1) { width: 20%; }
+   .table th:nth-child(2), td:nth-child(2) { width: 40%; }
+   .table th:nth-child(3), td:nth-child(3) { width: 10%; }
+   .table th:nth-child(4), td:nth-child(4) { width: 10%; }
 
-    .order-details {
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      background-color: #f9f9f9;
-    }
-
-    .order-item {
-        margin-bottom: 15px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px; /* Rounded corners */
-    }
 
     /* Hide the spinner controls */
     input[type="number"]::-webkit-inner-spin-button,
@@ -33,15 +21,12 @@
         margin: 0;
     };
 
-    .quantity-field {
-      width: 60px; /* Set a fixed width:60 for better alignment */
-      padding: 5px; /* Padding for usability */
-      font-size: 1.2rem; /* Adjust font size */
-    }
-
     /* Responsive adjustments */
-    @media (max-width: 576px) {
-        th:nth-child(4), td:nth-child(4) { width: 50%; } /* Adjust on mobile if needed 50*/
+    @media (max-width: 768px) {
+     .table th:nth-child(1), td:nth-child(1) { width: 10%; }
+     .table th:nth-child(2), td:nth-child(2) { width: 30%; }
+     .table th:nth-child(3), td:nth-child(3) { width: 10%; }
+     .table th:nth-child(4), td:nth-child(4) { width: 50%; }
     }
   </style>
 
@@ -58,7 +43,7 @@
     </div> 
   <hr>
     <form id="orderForm">
-      <h4>Coffee Selection</h4>
+      <h4>Coffee Selections</h4>
       <table class="table table-bordered table-striped mt-0 mb-3">
         <thead style=background-color:antiquewhite;>
           <tr>
@@ -71,9 +56,9 @@
         <tbody id="coffeeSelection"></tbody>
       </table>
 
-      <h4 class="mt-1">Snack Selection</h4>
-      <table class="table table-bordered table-striped mt-1">
-        <thead class="table-light">
+      <h4 class="mt-1">Snack Selections</h4>
+      <table class="table table-bordered table-striped mt-0">
+        <thead style=background-color:antiquewhite;>
           <tr>
             <th>Name</th>
             <th>Description</th>
@@ -125,8 +110,6 @@
   </div>
 </div>
   
-  <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/script.js"></script>
 </body>
