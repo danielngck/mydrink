@@ -87,7 +87,7 @@ async function loadProducts() {
           <td>
             <div class="input-group">
                 <button class="btn btn-outline-warning" type="button" onclick="changeQuantity('${coffee._id}', -1)" style="display: none;" id="decrease-${coffee._id}">-</button>
-                <input type="number" min="0" data-id="${coffee._id}" value="0" class="form-control form-control" onchange="calculateTotal()" />
+                <input type="number" min="0" data-id="${coffee._id}" value="0" class="form-control form-control-lg" onchange="calculateTotal()" />
                 <button class="btn btn-outline-success" type="button" onclick="changeQuantity('${coffee._id}', 1)">+</button>
             </div>
           </td>
@@ -110,7 +110,7 @@ async function loadProducts() {
           <td>
             <div class="input-group">
                 <button class="btn btn-outline-warning" type="button" onclick="changeQuantity('${snack._id}', -1)" style="display: none;" id="decrease-${snack._id}">-</button>
-                <input type="number" min="0" data-id="${snack._id}" value="0" class="form-control" onchange="calculateTotal()" />
+                <input type="number" min="0" data-id="${snack._id}" value="0" class="form-control form-control-lg" onchange="calculateTotal()" />
                 <button class="btn btn-outline-success" type="button" onclick="changeQuantity('${snack._id}', 1)">+</button>
             </div>
           </td>
@@ -130,7 +130,9 @@ async function loadProducts() {
 
     // Update quantity based on the change
     currentQuantity += change;
+
     if (currentQuantity < 0) currentQuantity = 0; // Prevent negative quantities
+    if (currentQuantity > 99) currentQuantity = 99; // Limit to a maximum of 99
     inputField.value = currentQuantity; // Update the input field
 
     // Show or hide the decrease button based on current quantity
@@ -161,7 +163,7 @@ function updateCartCount(count) {
 };
 
 function initializeCart() {
-    const cartCount = 0; // Reset cart count
+    cartCount = 0; // Reset cart count
     updateCartCount(cartCount); // Update displayed count
 
     // Set initial values of input fields to 0
