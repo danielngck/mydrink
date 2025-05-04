@@ -1353,7 +1353,7 @@ input:checked + .slider:before {
   z-index: 1050; /* Sit on top */
   left: 50%; /* Center horizontally */
   transform: translateX(-50%); /* Centering adjustment */
-  width: 70%; /* Full width */
+  width: 100%; /* Full width 70*/
   height: auto; /* Full height */
   overflow: hidden; /* Prevent overflow of the modal itself */
 }
