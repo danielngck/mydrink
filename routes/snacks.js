@@ -94,6 +94,23 @@ router.post('/snackCreate', async (req, res) => {
 
 // Update snack product
 router.put('/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   try {
     // Retrieve the current coffee from the database
     const snackDataBase = await Snack.findById(req.params.id);
@@ -155,6 +172,23 @@ router.get('/:id/edit', async (req, res) => {
 
 // Delete snack
 router.delete('/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+      
   try {
     await Snack.findByIdAndDelete(req.params.id) // find id and delete
     // res.json({ message: 'Coffee deleted' })

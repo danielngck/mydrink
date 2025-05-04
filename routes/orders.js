@@ -151,6 +151,10 @@ router.get('/orderHistory', async (req, res) => {
 
 // Update order status
 router.post('/update-status/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
   try {
       const { status } = req.body;
       const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true });
@@ -162,6 +166,10 @@ router.post('/update-status/:id', async (req, res) => {
 
 // Delete an order
 router.delete('/delete/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
   try {
       await Order.findByIdAndDelete(req.params.id);
       res.json({ message: 'Order deleted successfully' });
@@ -172,6 +180,10 @@ router.delete('/delete/:id', async (req, res) => {
 
 // Get order history for a specific user
 router.get('/user/:userId', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
   const { userId } = req.params;
   try {
       const orders = await Order.find({ userId }).sort({ orderDate: -1 });
@@ -185,6 +197,23 @@ router.get('/user/:userId', async (req, res) => {
 
 // Get all unique user IDs and usernames who have placed orders
 router.get('/users/all', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   try {
       await cnn.connect();
       // Fetch distinct userIds from the Order collection
@@ -213,6 +242,23 @@ router.get('/users/all', async (req, res) => {
 
 
 router.get('/admin-order-history', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   try {
       res.render('./base/admin-order-history.ejs', 
         { user: req.session.user, title: 'Admin order history' })}
@@ -228,6 +274,23 @@ async function getAllOrders() {
 
 // Route to fetch all user's order history (for admin)
 router.get('/adminOrderHistory', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
     try {
         const orders = await getAllOrders(); // Fetch all orders
         res.render('./base/admin-order-history', { orders }); // Render template
@@ -239,6 +302,23 @@ router.get('/adminOrderHistory', async (req, res) => {
 
 // Route to fetch all orders as JSON (for admin)
 router.get('/adminOrderHistoryJson', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
     try {
         const orders = await getAllOrders(); // Fetch all orders
         res.json(orders); // Send orders as JSON
@@ -250,6 +330,23 @@ router.get('/adminOrderHistoryJson', async (req, res) => {
 
 //route to handle order deletion
 router.delete('/deleteOrder/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   try {
       const { id } = req.params;
       await Order.findByIdAndDelete(id);
@@ -262,6 +359,23 @@ router.delete('/deleteOrder/:id', async (req, res) => {
 
 //update order status (for admin)
 router.patch('/update/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   const orderId = req.params.id;
   const { status } = req.body;
 
@@ -296,6 +410,23 @@ router.patch('/update/:id', async (req, res) => {
 
 //Get all users' orders (in admin order history)
 router.get('/orders/all', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
+
   try {
       const orders = await Order.find(); // Fetch all orders from the database
       res.json(orders);
@@ -350,6 +481,10 @@ router.post('/addToCart', (req, res) => {
 
 // Add this route to handle clearing the cart
 router.post('/clear', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
   if (req.session.user) {
       req.session.orders = []; // Clear session orders
       res.json({ success: true });

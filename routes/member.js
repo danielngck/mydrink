@@ -109,9 +109,22 @@ router.get('/list', async (req, res) => {
 
 /* DELETE a user */
 router.delete('/list/:id', async (req, res) => {
-  // if (!req.session.user || req.session.user.name !== 'admin') {
-  //   return res.status(403).json({ error: 'Access denied. Admins only.' });
-  // }
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
 
   try {
     await cnn.connect();
@@ -133,9 +146,22 @@ router.delete('/list/:id', async (req, res) => {
 
 /* UPDATE user fields */
 router.put('/list/:id', async (req, res) => {
-  // if (!req.session.user || req.session.user.name !== 'admin') {
-  //   return res.status(403).json({ error: 'Access denied. Admins only.' });
-  // }
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
+  if (!req.session.user.name || req.session.user.name !== 'admin') {
+        // Send a message and redirect after a delay
+        return res.status(403).send(`
+          <h1>Access Denied</h1>
+          <p>Admins only. You will be redirected to the login page.</p>
+          <script>
+            setTimeout(() => {
+              window.location.href = '/member/login';
+            }, 5000);
+          </script>
+        `);
+      };
 
   try {
     await cnn.connect();
@@ -317,6 +343,10 @@ router.get('/list/:userId', async (req, res) => {
 
 // Update Single User Details
 router.put('/singleList/:userId', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/member/login');
+  };
+
   const userId = req.params.userId
   const { urName, urEmail, urPwd } = req.body
 
