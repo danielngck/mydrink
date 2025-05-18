@@ -56,5 +56,25 @@ router.get('/page/comments', (req, res) => {
 });
 
 
+router.get('/about',(req,res) => {
+  res.render('./base/about.ejs')
+}
+);
+
+router.get('/get_in_touch',(req,res) => {
+  res.render('./base/get_in_touch.ejs')
+}
+);
+
+router.get('/customerSay',(req,res) => {
+  res.render('./base/customer.ejs')
+}
+);
+
+router.get('/shopMap',(req,res) => {
+  res.render('./base/shop.ejs')
+}
+);
+
 
 module.exports = router;

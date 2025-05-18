@@ -184,8 +184,8 @@ router.post('/addComment', async function (req, res) {
             createdAt: new Date(),
             isVisible: false // Default to invisible
         });
-
-        console.log('Comment saved:', result.insertedId);
+        
+        //console.log('Comment saved:', result.insertedId);
         res.status(200).json({ message: 'Comment added successfully!' });
     } catch (error) {
         console.error('Error saving comment:', error);
