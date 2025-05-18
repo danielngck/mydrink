@@ -10,15 +10,15 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto align-items-center">
         <li class="nav-item">
-          <a class="nav-link active" href="/">Home</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/#about1">About</a>
+          <a class="nav-link" href="/about">About</a>
         </li>
-
+        
         <li class="nav-item dropdown">
           <% if (!user || user.name !=='admin' ) { %>
-            <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">Product
             </a>
             <ul class="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdownMenuLink"
@@ -43,7 +43,7 @@
 
         <% if (user && user.name==='admin' ) { %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
               Admin Menu
             </a>
@@ -70,7 +70,7 @@
 
             <% if (user) { %>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="/#menu1" id="navbarDropdownMenuLink" role="button"
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                   data-bs-toggle="dropdown" aria-expanded="false">
                   Member
                 </a>
@@ -86,13 +86,13 @@
               <% } %>
                 
                   <li class="nav-item">
-                    <a class="nav-link" href="/#getintouch1">Get in touch</a>
+                    <a class="nav-link" href="/get_in_touch">Get in touch</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/#customer1">Customer Say</a>
+                    <a class="nav-link" href="/customerSay">Customer Say</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/#shop1">Shop</a>
+                    <a class="nav-link" href="/shopMap">Shop</a>
                   </li>
 
                     <% if (user) { %>
@@ -100,7 +100,7 @@
                         <a class="nav-link" href="/member/logout" style="color: blue; margin-bottom: -15px;">
                           <span class="fa fa-sign-out" style="color: green;"> <span style="color:blue;">Logout</span></span>
                         </a>
-                        <span style="font-size: 18px;color:navy">&nbsp;&nbsp;Hi,<%= user.name %> !</span>
+                        <span style="font-size: 16px;color:navy">&nbsp;&nbsp;Hi,<%= user.name %> !</span>
                       </li>
 
                       <% } else { %>
@@ -113,7 +113,7 @@
       </ul>
 
       <form action="/search/productSearch" method="GET" class="d-grid d-flex justify-content-start">
-        <input class="form-control w-75 ms-auto" type="text" name="q" placeholder="Search Products..." required />
+        <input class="form-control form-control-sm ms-auto" type="text" name="q" placeholder="Search Products..." required />
         <span class="input-group-text border-0 bg-transparent" id="search-addon">
           <button class="fa fa-search" type="submit"
             style="color:darkolivegreen;font-size:20px;outline:none;background:none"></button></span>
@@ -122,4 +122,30 @@
   </div>
 </nav>
 
-<script src="./js/script.js"></script>
+
+<script>
+  document.querySelectorAll('.navbar-nav .nav-link').forEach(anchor => {
+    anchor.addEventListener('click', function(event) {
+      const dropdownToggle = this.classList.contains('dropdown-toggle');
+      const navbarCollapse = document.querySelector('.navbar-collapse');
+
+      if (dropdownToggle) {
+        event.preventDefault();
+        const dropdownMenu = this.nextElementSibling;
+        dropdownMenu.classList.toggle('show');
+      } else {
+        if (navbarCollapse.classList.contains('show')) {
+          navbarCollapse.classList.remove('show');
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function(event) {
+      event.stopPropagation();
+    });
+  });
+</script>
+ 
+ <script src="./js/script.js"></script>

@@ -1,18 +1,15 @@
 <%- include('./base/head.ejs') %>
   <title>Panda Cafe</title>
 
-<body>
+  <div>
   <header><%- include('./base/header.ejs') %></header>
   <div><%- include('./base/banner.ejs') %></div>
   <div><%- include('./base/coffee.ejs') %></div>
-  <div><%- include('./base/about.ejs') %></div>
+  <div><%- include('./base/aboutHome.ejs') %></div>
   <div><%- include('./base/blog.ejs') %></div>
-  <div><%- include('./base/customer.ejs') %></div>
-  <div><%- include('./base/contact.ejs') %></div>
-  <div><%- include('./base/shop.ejs') %></div>
+  <div><%- include('./base/shopHome.ejs') %></div>
   <div><%- include('./base/copyright.ejs') %></div>
-
-  <footer class="footer_section"><%- include('./base/footer.ejs') %></footer>
+  </div>
 
    <!-- Flash Message Section -->
  <div id="alert-message" class="alert alert-success" role="alert" style="display: none;"></div>
@@ -45,19 +42,3 @@
 </script>
  <% } %>
 
-  <!-- Javascript files-->
-  <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous">
-  </script>
- 
-  <!-- <script src="/js/jquery.min.js"></script> -->
-  <!-- <script src="/js/popper.min.js"></script> -->
- 
-  <!-- <script src="/js/plugin.js"></script> -->
-  <!-- sidebar -->
-  <!-- <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script> -->
-  <!-- <script src="/js/custom.js"></script> -->
-</body>
-</html>

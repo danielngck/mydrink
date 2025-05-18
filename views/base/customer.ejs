@@ -1,6 +1,11 @@
+<%- include('head.ejs') %>
+  <title>Customer Say</title>
+
+<body>
+  <header><%- include('header.ejs') %></header>
 <!-- customer section start -->
 <div class="container-fluid no-gutters">
-    <div id="customer1" class="client_section layout_padding">
+    <div id="customer1" class="client_section customer_nav-padding">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -11,7 +16,7 @@
             <!-- <div class="client_section_2" id="featured-comments"> -->
                 <!-- Comments will be dynamically inserted here -->
             <!-- </div> -->
-            <div id="customerComments">
+            <div class="p-3" id="customerComments">
                 <!-- Visible customer comments will be dynamically inserted here -->
             </div>
         </div>
@@ -25,9 +30,11 @@
 <script src="/js/comment.js"></script> 
 <!-- <script src="/js/comment_o.js"></script>  -->
 
-
-
-
-
-
+  <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous">
+  </script>
+</body>
+</html>
 

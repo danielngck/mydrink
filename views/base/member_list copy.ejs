@@ -1,0 +1,129 @@
+<%- include('../base/head.ejs') %>
+  <title><%= title %></title>
+
+<body>
+  <header><%- include('../base/header.ejs') %></header>
+  <div class="container nav-padding">
+  <div class="d-flex justify-content-start align-items-center bg-light">
+    <h2>Members List</h2><span class="fa fa-3x fa-user" style="color: green; padding-bottom:10px; padding-left:20px;" ></span>
+  </div>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="userTable">
+      <% users.forEach(user => { %>
+        <tr id="user-<%= user._id %>">
+          <td><%= user._id %></td>
+          <td><%= user.urName %></td>
+          <td><%= user.urEmail %></td>
+          <td>
+            <div class="row g-2">
+                <div class="col-12 col-md-6">
+                    <button class="btn btn-primary btn-sm w-100" onclick="showUpdateModal('<%= user._id %>', '<%= user.urName %>', '<%= user.urEmail %>')">Update</button>
+                </div>
+                <div class="col-12 col-md-6">
+                    <button class="btn btn-danger btn-sm w-100" onclick="confirmDelete('<%= user._id %>')">Delete</button>
+                </div>
+            </div>
+        </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <!-- Update Modal -->
+  <div class="modal" id="updateModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="updateUserId">
+          <div class="form-group">
+            <label for="updateUsername">Username</label>
+            <input type="text" id="updateUsername" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="updateEmail">Email</label>
+            <input type="text" id="updateEmail" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="submitUpdate()">Save Changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+     <!-- Confirmation Dialog -->
+  <script>
+    function showUpdateModal(userId, username, email) {
+      // console.log("Opening modal for user:", userId, username, email); // Debug log
+      $('#updateUserId').val(userId);
+      $('#updateUsername').val(username);
+      $('#updateEmail').val(email);
+          // Check if the username is 'admin'
+        if (username === 'admin') {
+          $('#updateUsername').prop('readonly', true).css('background-color', '#f0f0f0'); // Grey out
+      } else {
+          $('#updateUsername').prop('readonly', false).css('background-color', ''); // Reset styles
+      }
+      $('#updateModal').modal('show');
+    }
+
+    function submitUpdate() {
+      const userId = $('#updateUserId').val();
+      const updatedData = {
+        urName: $('#updateUsername').val(),
+        urEmail: $('#updateEmail').val(),
+      };
+
+      $.ajax({
+        url: `/member/list/${userId}`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(updatedData),
+        success: function (response) {
+          alert(response.message);
+          location.reload(); // Reload the page to reflect changes
+        },
+        error: function (err) {
+          alert(err.responseJSON.error);
+        }
+      });
+    }
+
+    function confirmDelete(userId) {
+      if (confirm(`Are you sure you want to delete this user ?`)) {
+        $.ajax({
+          url: `/member/list/${userId}`,
+          type: 'DELETE',
+          success: function (response) {
+            alert(response.message);
+            $(`#user-${userId}`).remove(); // Remove the row dynamically
+          },
+          error: function (err) {
+            alert(err.responseJSON.error);
+          }
+        });
+      }
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+    crossorigin="anonymous"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</body>   
+</html>
